@@ -7,7 +7,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "tunnel": "node src/tunnel.js",
-    "test": "node test/system.test.js"
+    "test": "node test/system.test.js",
+    "deploy": "node scripts/deploy.js"
   },
   "keywords": [],
   "author": "",

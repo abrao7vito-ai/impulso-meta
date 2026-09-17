@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impulso - Mensagens que movem seu negócio</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            impulso: {
+              DEFAULT: '#059669', // Verde Impulso
+              dark: '#047857',
+              darker: '#065F46',
+              light: '#10B981',
+              mint: '#D1FAE5',   // Verde Menta
+              mintLight: '#ECFDF5',
+              graphite: '#111827', // Grafite Profundo
+              bg: '#F8FAFC'       // Off White
+            },
+            whatsapp: {
+              DEFAULT: '#25D366',
+              dark: '#128C7E',
+              darker: '#075E54',
+              light: '#DCF8C6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F8FAFC;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col bg-[#F8FAFC]">
+
+  <!-- ======================================================== -->
+  <!-- 1. SIDEBAR LATERAL (DESKTOP E GAVETA MOBILE)             -->
+  <!-- ======================================================== -->
+  <aside id="sidebar-drawer" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 shadow-sm">
+    <div class="flex flex-col flex-1 overflow-y-auto p-4 space-y-6">
+      
+      <!-- Brand Logo Impulso -->
+      <div class="flex items-center justify-between px-2 pt-2">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+          <!-- Vetor de Marca Dual-Leaf Impulso -->
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 shrink-0">
+            <path d="M7.5 22.8C7.1 21.9 7.3 20.8 8.1 20.1L15.6 13.8C16.6 12.9 18.2 13.2 18.8 14.4L20.2 17.3C20.6 18.2 20.4 19.3 19.6 20L12.1 26.3C11.1 27.2 9.5 26.9 8.9 25.7L7.5 22.8Z" fill="#059669"/>
+            <path d="M16 13.8C15.6 12.9 15.8 11.8 16.6 11.1L24.1 4.8C25.1 3.9 26.7 4.2 27.3 5.4L28.7 8.3C29.1 9.2 28.9 10.3 28.1 11L20.6 17.3C19.6 18.2 18 17.9 17.4 16.7L16 13.8Z" fill="#059669"/>
+          </svg>
+          <div>
+            <span class="font-extrabold text-2xl text-[#111827] tracking-tight leading-none block">impulso</span>
+            <span class="text-[10px] text-slate-400 font-medium tracking-tight">Mensagens que movem</span>
+          </div>
+        </div>
+
+        <!-- Botão Fechar no Mobile -->
+        <button onclick="toggleMobileSidebar()" class="p-1 text-slate-400 hover:text-slate-700 lg:hidden" aria-label="Fechar menu">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Links de Navegação -->
+      <nav class="space-y-1.5 pt-2">
+        <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab active-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-semibold bg-emerald-100/70 text-emerald-800 transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </button>
+
+        <button onclick="switchTab('new-campaign')" id="tab-btn-new-campaign" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Novo Disparo</span>
+        </button>
+
+        <button onclick="switchTab('campaigns')" id="tab-btn-campaigns" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Campanhas</span>
+        </button>
+
+        <button onclick="switchTab('audiences')" id="tab-btn-audiences" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Contatos</span>
+        </button>
+
+        <button onclick="switchTab('templates')" id="tab-btn-templates" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Templates</span>
+        </button>
+
+        <button onclick="switchTab('blacklist')" id="tab-btn-blacklist" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          <span>Descadastro</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="tab-btn-settings" class="nav-tab w-full flex items-center space-x-3 px-3.5 py-2.5 text-sm rounded-xl font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Configurações</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Card de Suporte / Ajuda no Rodapé da Sidebar -->
+    <div class="p-4 border-t border-slate-100">
+      <div class="bg-[#F8FAFC] border border-slate-200/80 rounded-2xl p-3.5 space-y-2.5">
+        <div class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#059669] shadow-sm">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-slate-900">Precisa de ajuda?</h4>
+          <p class="text-[11px] text-slate-500 leading-tight">Nossa equipe está pronta para te apoiar.</p>
+        </div>
+        <button onclick="switchTab('settings')" class="text-xs font-bold text-[#059669] hover:underline flex items-center space-x-1">
+          <span>Falar com o suporte</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay para fechar sidebar mobile -->
+  <div id="sidebar-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/40 z-30 hidden lg:hidden"></div>
+
+  <!-- ======================================================== -->
+  <!-- 2. TOPBAR PRINCIPAL                                      -->
+  <!-- ======================================================== -->
+  <header class="lg:pl-64 bg-white border-b border-slate-200/80 sticky top-0 z-20 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Mobile: Botão Menu + Logo -->
+      <div class="flex items-center space-x-3 lg:hidden">
+        <button onclick="toggleMobileSidebar()" class="p-2 text-slate-600 hover:text-slate-900 rounded-lg" aria-label="Abrir menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div class="flex items-center space-x-2">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0">
+            <path d="M7.5 22.8C7.1 21.9 7.3 20.8 8.1 20.1L15.6 13.8C16.6 12.9 18.2 13.2 18.8 14.4L20.2 17.3C20.6 18.2 20.4 19.3 19.6 20L12.1 26.3C11.1 27.2 9.5 26.9 8.9 25.7L7.5 22.8Z" fill="#059669"/>
+            <path d="M16 13.8C15.6 12.9 15.8 11.8 16.6 11.1L24.1 4.8C25.1 3.9 26.7 4.2 27.3 5.4L28.7 8.3C29.1 9.2 28.9 10.3 28.1 11L20.6 17.3C19.6 18.2 18 17.9 17.4 16.7L16 13.8Z" fill="#059669"/>
+          </svg>
+          <span class="font-black text-lg text-slate-900">impulso</span>
+        </div>
+      </div>
+
+      <!-- Barra de Busca (Mockup de Branding) -->
+      <div class="hidden sm:flex items-center flex-1 max-w-md">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+          <input type="text" placeholder="Buscar contatos, campanhas ou mensagens..." class="w-full bg-[#F8FAFC] border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#059669] focus:bg-white transition">
+        </div>
+      </div>
+
+      <!-- Status da Conexão Meta & Perfil do Usuário -->
+      <div class="flex items-center space-x-3">
+        <!-- Status da Conexão Meta -->
+        <div id="meta-status-pill" class="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+          <span id="meta-status-text">Verificando status...</span>
+        </div>
+
+        <!-- Indicador de Cota / Plano do Cliente -->
+        <div id="tenant-quota-pill" class="hidden sm:flex items-center space-x-2 text-xs bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl text-slate-700">
+          <span id="tenant-plan-badge" class="font-bold text-[#059669]">Plano Pro</span>
+          <span class="text-slate-300">|</span>
+          <span id="tenant-quota-text" class="font-medium text-slate-600">0 / 0 msgs</span>
+        </div>
+
+        <!-- Botão Super Admin (Exibido apenas para SUPERADMIN) -->
+        <a id="header-admin-link" href="/admin.html" class="hidden text-xs bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1.5 rounded-xl font-bold hover:bg-purple-100 transition items-center space-x-1.5">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Painel Proprietário</span>
+        </a>
+
+        <!-- Badge de Perfil do Cliente -->
+        <div class="flex items-center space-x-2 pl-2 border-l border-slate-200">
+          <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#059669] flex items-center justify-center font-bold text-xs shadow-inner">
+            <span id="user-avatar-initials">AS</span>
+          </div>
+          <div class="hidden md:block text-left">
+            <span id="user-display-name" class="text-xs font-bold text-slate-900 block leading-tight">Ana Souza</span>
+            <span id="user-tenant-name" class="text-[10px] text-slate-400 block -mt-0.5 font-medium">Sua empresa</span>
+          </div>
+          
+          <button onclick="handleLogout()" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Encerrar Sessão">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 3. ÁREA DE CONTEÚDO PRINCIPAL (MAIN)                     -->
+  <!-- ======================================================== -->
+  <main class="lg:pl-64 flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 1. DASHBOARD VIEW (VISÃO GERAL)                      -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-dashboard" class="tab-view space-y-6">
+      
+      <!-- Cabeçalho da Tela -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-extrabold text-[#111827]">Visão geral</h1>
+          <p class="text-sm text-slate-500">Acompanhe o desempenho das suas campanhas em tempo real.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button onclick="loadDashboardStats()" class="inline-flex items-center space-x-2 text-xs bg-white border border-slate-200 hover:bg-slate-50 px-3.5 py-2.5 rounded-xl text-slate-700 shadow-sm font-semibold transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Atualizar</span>
+          </button>
+          <button onclick="switchTab('new-campaign')" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] px-4 py-2.5 rounded-xl text-white font-bold shadow-sm shadow-emerald-200 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Nova campanha</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Metric Cards (Visual da Referência Impulso) -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- 1. Enviadas -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#059669] flex items-center justify-center">
+              <i data-lucide="send" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-bold text-[#059669] bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
+              <i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> +12%
+            </span>
+          </div>
+          <p id="stat-total-sent" class="text-2xl font-black text-[#111827]">0</p>
+          <span class="text-xs text-slate-500 font-medium mt-0.5 block">Mensagens enviadas</span>
+        </div>
+
+        <!-- 2. Taxa de Entrega -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#059669] flex items-center justify-center">
+              <i data-lucide="check-check" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-bold text-[#059669] bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
+              <i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> +3%
+            </span>
+          </div>
+          <p id="stat-delivery-rate" class="text-2xl font-black text-[#111827]">0%</p>
+          <span class="text-xs text-slate-500 font-medium mt-0.5 block"><span id="stat-total-delivered">0</span> entregues</span>
+        </div>
+
+        <!-- 3. Taxa de Leitura -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#059669] flex items-center justify-center">
+              <i data-lucide="eye" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-bold text-[#059669] bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
+              <i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> +5%
+            </span>
+          </div>
+          <p id="stat-read-rate" class="text-2xl font-black text-[#111827]">0%</p>
+          <span class="text-xs text-slate-500 font-medium mt-0.5 block"><span id="stat-total-read">0</span> lidas</span>
+        </div>
+
+        <!-- 4. Total Contatos -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#059669] flex items-center justify-center">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Bases</span>
+          </div>
+          <p id="stat-total-contacts" class="text-2xl font-black text-[#111827]">0</p>
+          <span class="text-xs text-slate-500 font-medium mt-0.5 block">Contatos importados</span>
+        </div>
+
+        <!-- 5. Falhas / Erros -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow transition col-span-2 lg:col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">Erros</span>
+          </div>
+          <p id="stat-total-failed" class="text-2xl font-black text-rose-600">0</p>
+          <span class="text-xs text-slate-500 font-medium mt-0.5 block">Falhas ou rejeições</span>
+        </div>
+      </div>
+
+      <!-- Grid Principal: Últimas Campanhas + Prévia WhatsApp -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Coluna Esquerda: Tabela Últimas Campanhas (lg:col-span-8) -->
+        <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900">Últimas campanhas</h2>
+            <button onclick="switchTab('campaigns')" class="text-xs font-bold text-[#059669] hover:underline flex items-center space-x-1">
+              <span>Ver todas</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-100">
+                <tr>
+                  <th class="px-6 py-3.5">Campanha</th>
+                  <th class="px-6 py-3.5">Template</th>
+                  <th class="px-6 py-3.5">Status</th>
+                  <th class="px-6 py-3.5">Progresso</th>
+                  <th class="px-6 py-3.5">Lidas / Entregues</th>
+                  <th class="px-6 py-3.5 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-campaigns-tbody" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="6" class="px-6 py-8 text-center text-slate-400">Carregando campanhas...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Prévia da Mensagem (WhatsApp Mockup da Marca) (lg:col-span-4) -->
+        <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-sm font-bold text-slate-900">Prévia da mensagem</h3>
+            <span class="text-[11px] font-bold text-[#059669] bg-emerald-50 px-2 py-0.5 rounded-full">WhatsApp Oficial</span>
+          </div>
+
+          <!-- Smartphone Frame Mockup -->
+          <div class="bg-[#F0F2F5] rounded-2xl p-3 border border-slate-200 space-y-2">
+            <!-- Header do Chat -->
+            <div class="bg-[#075E54] text-white p-2.5 rounded-xl flex items-center justify-between shadow-sm">
+              <div class="flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-full bg-[#128C7E] flex items-center justify-center text-white text-[10px] font-bold">
+                  <i data-lucide="building-2" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold leading-tight">Sua Empresa</p>
+                  <p class="text-[9px] text-emerald-200">online</p>
+                </div>
+              </div>
+              <i data-lucide="more-vertical" class="w-4 h-4 text-emerald-100"></i>
+            </div>
+
+            <!-- Balão WhatsApp com Branding Impulso -->
+            <div class="bg-white rounded-xl p-3.5 shadow-sm space-y-2 border border-slate-100">
+              <p class="text-xs text-slate-800 leading-relaxed font-normal">
+                Olá, tudo bem? 👋<br>
+                Temos uma novidade especial preparada com carinho para você!<br><br>
+                Aproveite o melhor que a nossa plataforma oferece com ofertas exclusivas.
+              </p>
+
+              <!-- Imagem / Banner do Mockup -->
+              <div class="rounded-lg overflow-hidden bg-gradient-to-r from-emerald-900 to-slate-900 p-3 text-white">
+                <div class="flex items-center space-x-2">
+                  <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0">
+                    <path d="M7.5 22.8L15.6 13.8C16.6 12.9 18.2 13.2 18.8 14.4L20.2 17.3L12.1 26.3L7.5 22.8Z" fill="#D1FAE5"/>
+                    <path d="M16 13.8L24.1 4.8C25.1 3.9 26.7 4.2 27.3 5.4L28.7 8.3L20.6 17.3L16 13.8Z" fill="#D1FAE5"/>
+                  </svg>
+                  <span class="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">Mais conversas, mais conquistas</span>
+                </div>
+              </div>
+
+              <!-- CTA Button -->
+              <div class="pt-1">
+                <button type="button" class="w-full bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center space-x-1 shadow-sm">
+                  <span>Ver novidades</span>
+                  <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                </button>
+              </div>
+
+              <div class="flex justify-end items-center space-x-1 text-[9px] text-slate-400 pt-1">
+                <span>10:24</span>
+                <i data-lucide="check-check" class="w-3 h-3 text-sky-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 2. NOVO DISPARO (ASSISTENTE DE 4 ETAPAS)             -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-new-campaign" class="tab-view hidden space-y-6">
+      
+      <!-- Cabeçalho do Wizard -->
+      <div>
+        <h1 class="text-2xl font-extrabold text-[#111827]">Novo disparo em massa</h1>
+        <p class="text-sm text-slate-500">Siga as quatro etapas para configurar e iniciar seu envio com template oficial.</p>
+      </div>
+
+      <!-- Stepper Header (4 Etapas) -->
+      <div class="grid grid-cols-4 gap-2 border-b border-slate-200/80 pb-4">
+        <div id="step-tab-1" class="flex items-center space-x-2 text-emerald-800 font-bold text-xs sm:text-sm">
+          <span class="w-7 h-7 rounded-xl bg-[#059669] text-white flex items-center justify-center text-xs font-bold">1</span>
+          <span class="truncate">Lista de Contatos</span>
+        </div>
+        <div id="step-tab-2" class="flex items-center space-x-2 text-slate-400 font-medium text-xs sm:text-sm">
+          <span class="w-7 h-7 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">2</span>
+          <span class="truncate">Template Meta</span>
+        </div>
+        <div id="step-tab-3" class="flex items-center space-x-2 text-slate-400 font-medium text-xs sm:text-sm">
+          <span class="w-7 h-7 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">3</span>
+          <span class="truncate">Mapear Variáveis</span>
+        </div>
+        <div id="step-tab-4" class="flex items-center space-x-2 text-slate-400 font-medium text-xs sm:text-sm">
+          <span class="w-7 h-7 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">4</span>
+          <span class="truncate">Revisar & Disparar</span>
+        </div>
+      </div>
+
+      <!-- ETAPA 1: CONTATOS -->
+      <div id="wizard-step-1" class="wizard-step space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Selecione a Origem dos Destinatários</h2>
+              <p class="text-xs text-slate-500">Faça upload de planilha, cole texto ou escolha uma Lista Salva (Audiência)</p>
+            </div>
+            
+            <!-- Botões de Alternância Upload / Salva -->
+            <div class="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button type="button" id="btn-src-upload" onclick="setContactSourceMode('upload')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition">
+                Upload / Colar
+              </button>
+              <button type="button" id="btn-src-saved" onclick="setContactSourceMode('saved')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+                Lista Salva (Audiência)
+              </button>
+            </div>
+          </div>
+
+          <!-- MODO 1: UPLOAD / COLAR -->
+          <div id="source-mode-upload" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Box Upload -->
+            <div class="border-2 border-dashed border-slate-300 hover:border-[#059669] rounded-2xl p-6 text-center cursor-pointer transition bg-[#F8FAFC] hover:bg-emerald-50/30" onclick="document.getElementById('file-upload-input').click()">
+              <input type="file" id="file-upload-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleFileUpload(event)">
+              <div class="w-12 h-12 bg-emerald-100 text-[#059669] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">
+                <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+              </div>
+              <p class="font-bold text-slate-800 text-sm">Clique para enviar ou arraste a planilha</p>
+              <p class="text-xs text-slate-400 mt-1">Formatos suportados: .xlsx, .xls, .csv (até 15MB)</p>
+              <div class="mt-4">
+                <button type="button" onclick="event.stopPropagation(); loadSampleFile()" class="text-xs text-[#059669] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl font-bold transition">
+                  📄 Carregar Planilha de Exemplo (Pronta)
+                </button>
+              </div>
+            </div>
+
+            <!-- Box Colar Texto -->
+            <div class="flex flex-col">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Ou cole aqui em formato CSV / Texto:</label>
+              <textarea id="raw-contacts-textarea" rows="5" placeholder="Nome,Telefone,Codigo,Valor&#10;Carlos,11999998888,PED-01,150.00&#10;Mariana,21988887777,PED-02,200.00" class="flex-1 w-full text-xs font-mono border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#059669] bg-[#F8FAFC]"></textarea>
+              <button type="button" onclick="parseRawTextContacts()" class="mt-2 text-xs bg-slate-900 hover:bg-black text-white font-bold py-2.5 rounded-xl transition text-center shadow-sm">
+                Processar Texto Colado
+              </button>
+            </div>
+          </div>
+
+          <!-- MODO 2: LISTA SALVA -->
+          <div id="source-mode-saved" class="hidden p-6 bg-[#F8FAFC] rounded-2xl border border-slate-200 space-y-4">
+            <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">Escolha uma Lista Salva cadastrada:</label>
+            <div class="flex items-center space-x-3">
+              <select id="select-saved-audience" onchange="onSelectAudienceChange(this.value)" class="flex-1 text-xs border border-slate-300 rounded-xl p-2.5 bg-white font-medium">
+                <option value="">Carregando listas salvas...</option>
+              </select>
+              <button type="button" onclick="loadSelectedAudienceIntoWizard()" class="px-5 py-2.5 bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs rounded-xl shadow-sm transition">
+                Carregar Contatos da Lista
+              </button>
+            </div>
+          </div>
+
+          <!-- BLOCO DE CONSENTIMENTO LGPD (OPT-IN) -->
+          <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200 space-y-2">
+            <div class="flex items-center space-x-2 text-emerald-900 font-bold text-xs">
+              <i data-lucide="shield-check" class="w-4 h-4 text-[#059669]"></i>
+              <span>Consentimento LGPD & Origem dos Destinatários (Opt-In):</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Origem do Cadastro:</label>
+                <select id="consent-source-select" class="w-full text-xs border border-slate-300 rounded-xl p-2 bg-white font-medium">
+                  <option value="WEBSITE_FORM">Formulário Web / Cadastro no Site</option>
+                  <option value="ECOMMERCE_ORDER">Cliente de E-commerce / Pedido Concluído</option>
+                  <option value="WHATSAPP_INBOUND">Conversa Iniciada pelo Cliente no WhatsApp</option>
+                  <option value="CONTRACT">Contrato Comercial / Termo Formal</option>
+                </select>
+              </div>
+              <div class="flex items-center pt-2 sm:pt-4">
+                <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer">
+                  <input type="checkbox" id="chk-lgpd-consent" checked class="w-4 h-4 text-[#059669] rounded border-slate-300">
+                  <span class="text-[11px] font-medium">Declaro que possuo autorização prévia e consentimento dos contatos.</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pré-visualização da Importação -->
+          <div id="import-preview-container" class="hidden mt-6 border-t border-slate-200/80 pt-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center space-x-3">
+                <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full flex items-center">
+                  <i data-lucide="check" class="w-3.5 h-3.5 mr-1"></i>
+                  <span id="preview-valid-count">0</span> contatos válidos
+                </span>
+                <span id="preview-invalid-badge" class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1 rounded-full hidden">
+                  <span id="preview-invalid-count">0</span> inválidos
+                </span>
+              </div>
+
+              <!-- Seleção de colunas -->
+              <div class="flex items-center space-x-3 text-xs">
+                <div class="flex items-center space-x-1.5">
+                  <label class="font-bold text-slate-700">Coluna Telefone:</label>
+                  <select id="select-phone-column" onchange="recalculateContactColumns()" class="border border-slate-300 rounded-xl px-2.5 py-1 bg-white font-medium text-slate-800"></select>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <label class="font-bold text-slate-700">Coluna Nome:</label>
+                  <select id="select-name-column" class="border border-slate-300 rounded-xl px-2.5 py-1 bg-white font-medium text-slate-800"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabela de amostra -->
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+              <table class="w-full text-left text-xs">
+                <thead id="preview-table-head" class="bg-slate-50 text-slate-600 uppercase font-semibold"></thead>
+                <tbody id="preview-table-body" class="divide-y divide-slate-200 bg-white"></tbody>
+              </table>
+            </div>
+
+            <!-- Salvar como Audiência / Lista Salva -->
+            <div class="p-3.5 bg-[#F8FAFC] rounded-2xl border border-slate-200">
+              <label class="flex items-center space-x-2 text-xs font-bold text-slate-800 cursor-pointer">
+                <input type="checkbox" id="chk-save-as-audience" onchange="toggleSaveAudienceNameInput(this.checked)" class="w-4 h-4 text-[#059669] rounded border-slate-300">
+                <span>Salvar estes contatos como uma <b>Lista Salva (Audiência)</b> para reutilizar</span>
+              </label>
+              <div id="save-as-audience-box" class="hidden mt-2 pt-2 border-t border-slate-200 flex items-center space-x-2">
+                <input type="text" id="save-audience-name-input" placeholder="Nome da Lista (ex: Clientes VIP Outubro)" class="text-xs border border-slate-300 rounded-xl p-2 flex-1 bg-white">
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button type="button" onclick="goToStep(2)" class="inline-flex items-center space-x-2 bg-[#059669] hover:bg-[#047857] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+                <span>Continuar para Escolha de Template</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ETAPA 2: ESCOLHA DE TEMPLATE (Lado a Lado em Telas Largas) -->
+      <div id="wizard-step-2" class="wizard-step hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Escolha o Modelo de Mensagem (Template Oficial Meta)</h2>
+              <p class="text-xs text-slate-500">Apenas templates pré-aprovados pela Meta podem ser enviados ativamente.</p>
+            </div>
+            <button onclick="syncTemplatesFromMeta()" class="inline-flex items-center space-x-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3.5 py-2 rounded-xl border border-slate-200 transition">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Sincronizar Templates da Meta</span>
+            </button>
+          </div>
+
+          <!-- Layout Lado a Lado: Formulário / Lista à Esquerda, Prévia WhatsApp à Direita -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Lista de Templates Disponíveis -->
+            <div class="lg:col-span-7 space-y-3 max-h-[500px] overflow-y-auto pr-2" id="templates-cards-container">
+              <p class="text-sm text-slate-400">Carregando modelos...</p>
+            </div>
+
+            <!-- Pré-visualização WhatsApp ao Vivo -->
+            <div class="lg:col-span-5 bg-[#F8FAFC] p-4 rounded-2xl border border-slate-200 flex flex-col items-center sticky top-24">
+              <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Prévia no WhatsApp</p>
+              
+              <!-- Moldura Smartphone WhatsApp -->
+              <div class="w-full max-w-[300px] bg-[#EFEAE2] rounded-2xl p-3.5 shadow-inner min-h-[320px] flex flex-col justify-end border border-slate-300">
+                <div class="bg-white rounded-xl p-3.5 text-xs shadow-sm space-y-1.5 relative border border-slate-100">
+                  <div id="preview-bubble-header" class="font-bold text-slate-900 text-xs hidden"></div>
+                  <p id="preview-bubble-body" class="text-slate-800 whitespace-pre-wrap leading-relaxed">Selecione um template para visualizar o texto.</p>
+                  <p id="preview-bubble-footer" class="text-[10px] text-slate-400 hidden"></p>
+                  <div class="flex justify-end items-center space-x-1 text-[9px] text-slate-400 mt-1">
+                    <span>10:24</span>
+                    <i data-lucide="check-check" class="w-3 h-3 text-sky-500"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center border-t border-slate-200/80 pt-6 mt-6">
+            <button type="button" onclick="goToStep(1)" class="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2">
+              Voltar
+            </button>
+            <button type="button" id="btn-step2-next" onclick="goToStep(3)" disabled class="inline-flex items-center space-x-2 bg-[#059669] disabled:opacity-50 hover:bg-[#047857] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+              <span>Continuar para Mapeamento</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 3: MAPEAMENTO DE VARIÁVEIS -->
+      <div id="wizard-step-3" class="wizard-step hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+          <h2 class="text-base font-bold text-slate-900 mb-1">Mapear Variáveis do Template</h2>
+          <p class="text-xs text-slate-500 mb-6">Associe as tags dinâmicas (<code class="text-[#059669] bg-emerald-50 px-1.5 py-0.5 rounded font-mono text-xs">{{1}}</code>, <code class="text-[#059669] bg-emerald-50 px-1.5 py-0.5 rounded font-mono text-xs">{{2}}</code>) com as colunas da sua lista importada.</p>
+
+          <div id="variable-mapping-container" class="space-y-4 max-w-xl">
+            <!-- Injetado dinamicamente via app.js -->
+          </div>
+
+          <!-- Exemplo dinâmico com o 1º contato -->
+          <div class="mt-8 p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl">
+            <p class="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1 flex items-center">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5 text-[#059669]"></i>
+              Exemplo Real do 1º Contato da Lista:
+            </p>
+            <p id="mapped-message-example" class="text-xs text-slate-700 italic bg-white p-3.5 rounded-xl border border-emerald-100 mt-2 whitespace-pre-wrap"></p>
+          </div>
+
+          <div class="flex justify-between items-center border-t border-slate-200/80 pt-6 mt-6">
+            <button type="button" onclick="goToStep(2)" class="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2">
+              Voltar
+            </button>
+            <button type="button" onclick="goToStep(4)" class="inline-flex items-center space-x-2 bg-[#059669] hover:bg-[#047857] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+              <span>Continuar para Revisão</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 4: REVISÃO & DISPARO -->
+      <div id="wizard-step-4" class="wizard-step hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm max-w-2xl mx-auto space-y-5">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Configurar e Iniciar Campanha</h2>
+            <p class="text-xs text-slate-500">Confira as informações antes de iniciar o envio em massa.</p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nome da Campanha:</label>
+              <input type="text" id="campaign-name-input" placeholder="Ex: Cobrança Setembro ou Promoção VIP" class="w-full text-xs border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Intervalo entre Mensagens:</label>
+                <select id="campaign-delay-select" class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2.5 bg-white focus:ring-2 focus:ring-[#059669] focus:outline-none">
+                  <option value="500">500 ms (Rápido - 2 msgs/seg)</option>
+                  <option value="1000" selected>1.000 ms (Recomendado - 1 seg)</option>
+                  <option value="2000">2.000 ms (Moderado - 2 segs)</option>
+                  <option value="4000">4.000 ms (Seguro - 4 segs)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Modo de Envio:</label>
+                <div id="review-simulation-pill" class="text-xs font-bold px-3 py-2.5 rounded-xl border bg-amber-50 text-amber-800 border-amber-200 flex items-center">
+                  <span class="w-2 h-2 rounded-full bg-amber-500 mr-2"></span>
+                  <span id="review-simulation-text">Sandbox (Simulação)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Programação do Disparo (Agora ou Agendado) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Programação do Disparo:</label>
+              <div class="grid grid-cols-2 gap-3 mb-2">
+                <label id="timing-label-now" class="flex items-center p-3 rounded-xl border cursor-pointer transition bg-emerald-50 border-emerald-300">
+                  <input type="radio" name="timing-choice" value="now" checked onchange="toggleTimingChoice(false)" class="text-[#059669] w-4 h-4 mr-2.5">
+                  <div>
+                    <span class="text-xs font-bold text-slate-800 block">Disparar Agora</span>
+                    <span class="text-[11px] text-slate-500">Inicia assim que confirmar</span>
+                  </div>
+                </label>
+                <label id="timing-label-later" class="flex items-center p-3 rounded-xl border cursor-pointer transition bg-white border-slate-200">
+                  <input type="radio" name="timing-choice" value="later" onchange="toggleTimingChoice(true)" class="text-[#059669] w-4 h-4 mr-2.5">
+                  <div>
+                    <span class="text-xs font-bold text-slate-800 block">Agendar Disparo</span>
+                    <span class="text-[11px] text-slate-500">Data e horário futuros</span>
+                  </div>
+                </label>
+              </div>
+
+              <div id="timing-datetime-box" class="hidden p-3 bg-[#F8FAFC] rounded-xl border border-slate-200 space-y-1">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase">Data e Hora de Início:</label>
+                <input type="datetime-local" id="campaign-scheduled-time" class="text-xs border border-slate-300 rounded-lg p-2 bg-white w-full">
+                <p class="text-[10px] text-slate-400">O sistema iniciará o envio automaticamente quando o horário for atingido.</p>
+              </div>
+            </div>
+
+            <!-- Resumo da Campanha -->
+            <div class="bg-[#F8FAFC] p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-medium">Total de Contatos Válidos:</span>
+                <span id="review-total-contacts" class="font-bold text-slate-900">0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-medium">Template Escolhido:</span>
+                <span id="review-template-name" class="font-bold text-slate-900">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500 font-medium">Idioma do Template:</span>
+                <span id="review-template-lang" class="font-bold text-slate-900">pt_BR</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center border-t border-slate-200/80 pt-6 mt-6">
+            <button type="button" onclick="goToStep(3)" class="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2">
+              Voltar
+            </button>
+            <button type="button" onclick="submitAndStartCampaign()" class="inline-flex items-center space-x-2 bg-[#059669] hover:bg-[#047857] text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg shadow-emerald-200 transition">
+              <i id="btn-start-campaign-icon" data-lucide="rocket" class="w-4 h-4"></i>
+              <span id="btn-start-campaign-text">Iniciar Disparo Imediato</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 3. CAMPANHAS VIEW (GERENCIADOR & AUDITORIA)           -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-campaigns" class="tab-view hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-extrabold text-[#111827]">Gerenciador de Campanhas</h1>
+          <p class="text-sm text-slate-500">Acompanhe o andamento, pause, retome e exporte relatórios detalhados.</p>
+        </div>
+        <button onclick="loadAllCampaigns()" class="inline-flex items-center space-x-2 text-xs bg-white border border-slate-200 hover:bg-slate-50 px-3.5 py-2.5 rounded-xl text-slate-700 shadow-sm font-semibold transition">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Recarregar</span>
+        </button>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-100">
+              <tr>
+                <th class="px-6 py-3.5">ID</th>
+                <th class="px-6 py-3.5">Nome da Campanha</th>
+                <th class="px-6 py-3.5">Template</th>
+                <th class="px-6 py-3.5">Status</th>
+                <th class="px-6 py-3.5">Progresso</th>
+                <th class="px-6 py-3.5">Envios (Env/Ent/Lid/Falha)</th>
+                <th class="px-6 py-3.5 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="all-campaigns-tbody" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="7" class="px-6 py-8 text-center text-slate-400">Carregando lista de campanhas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 4. TEMPLATES VIEW (TEMPLATES & TESTE DE ENVIO)       -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-templates" class="tab-view hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-extrabold text-[#111827]">Templates WhatsApp Oficiais</h1>
+          <p class="text-sm text-slate-500">Modelos cadastrados na sua conta Meta Business Account.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button onclick="openCreateTemplateModal()" class="inline-flex items-center space-x-2 text-xs bg-slate-900 hover:bg-black text-white font-bold px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-[#059669]"></i>
+            <span>+ Criar Novo Template</span>
+          </button>
+          <button onclick="syncTemplatesFromMeta()" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Sincronizar da Meta</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Teste rápido de envio individual -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <h2 class="text-base font-bold text-slate-900 mb-1 flex items-center">
+          <i data-lucide="send" class="w-4 h-4 mr-2 text-[#059669]"></i>
+          Teste Rápido de Disparo Individual
+        </h2>
+        <p class="text-xs text-slate-500 mb-4">Envie um template de teste agora para o seu próprio WhatsApp para validar a entrega.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <input type="text" id="quick-test-phone" placeholder="Seu Telefone (ex: 11999998888)" class="text-xs border border-slate-300 rounded-xl px-3 py-2 bg-[#F8FAFC]">
+          <select id="quick-test-template" class="text-xs border border-slate-300 rounded-xl px-3 py-2 bg-white"></select>
+          <button onclick="sendQuickTestMessage()" class="text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold py-2 px-4 rounded-xl transition">
+            Enviar Teste Agora
+          </button>
+        </div>
+        <div id="quick-test-feedback" class="mt-2 text-xs font-medium hidden"></div>
+      </div>
+
+      <!-- Grid de Templates -->
+      <div id="templates-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Injetado dinamicamente via app.js -->
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 5. AUDIÊNCIAS (LISTAS SALVAS / CONTATOS)              -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-audiences" class="tab-view hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-extrabold text-[#111827]">Listas Salvas (Audiências)</h1>
+          <p class="text-sm text-slate-500">Bases de contatos salvas para reutilizar em campanhas recorrentes.</p>
+        </div>
+        <button onclick="switchTab('new-campaign')" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-4 py-2.5 rounded-xl shadow-sm transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Importar Nova Lista</span>
+        </button>
+      </div>
+
+      <div id="audiences-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Injetado dinamicamente -->
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 6. LISTA NEGRA / DESCADASTRO (OPT-OUT)                -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-blacklist" class="tab-view hidden space-y-6">
+      <div>
+        <h1 class="text-2xl font-extrabold text-[#111827]">Lista Negra & Proteção Anti-Ban (Descadastro)</h1>
+        <p class="text-sm text-slate-500">Controle automático de contatos que solicitaram descadastro para proteger o seu Quality Rating.</p>
+      </div>
+
+      <!-- Banner Informativo Impulso -->
+      <div class="bg-gradient-to-r from-emerald-900 to-slate-900 p-5 rounded-2xl text-white flex items-start space-x-4 shadow-sm">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-bold text-sm text-emerald-400">Proteção Automática Ativa</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Sempre que um cliente responder mensagens no WhatsApp com palavras como <b>SAIR</b>, <b>PARAR</b>, <b>CANCELAR</b> ou <b>STOP</b>, o Webhook da Meta captura a resposta e bloqueia o número imediatamente nesta Lista Negra, enviando uma confirmação educada e pulando esse contato em futuros disparos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Adicionar Manualmente & Busca -->
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Bloquear Número Manualmente:</label>
+          <input type="text" id="manual-blacklist-phone" placeholder="Telefone (ex: 11999998888)" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 bg-[#F8FAFC]">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Motivo / Observação:</label>
+          <input type="text" id="manual-blacklist-reason" placeholder="Ex: Solicitou via suporte / Não ligar" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 bg-[#F8FAFC]">
+        </div>
+        <div class="flex items-end">
+          <button onclick="submitManualBlacklist()" class="w-full text-xs bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm">
+            <i data-lucide="user-x" class="w-4 h-4"></i>
+            <span>Adicionar à Lista Negra</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Bloqueados -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <h2 class="text-sm font-bold text-slate-800">Números Bloqueados</h2>
+            <span id="blacklist-count-badge" class="text-xs bg-rose-100 text-rose-800 font-bold px-2.5 py-0.5 rounded-full">0 contatos</span>
+          </div>
+          <input type="text" id="blacklist-search-input" onkeyup="searchBlacklist(this.value)" placeholder="Buscar número ou motivo..." class="text-xs border border-slate-300 rounded-xl px-3 py-1.5 w-64 bg-[#F8FAFC]">
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-100">
+              <tr>
+                <th class="px-6 py-3">Telefone</th>
+                <th class="px-6 py-3">Origem</th>
+                <th class="px-6 py-3">Motivo</th>
+                <th class="px-6 py-3">Bloqueado em</th>
+                <th class="px-6 py-3 text-right">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="blacklist-tbody" class="divide-y divide-slate-100 bg-white">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- 7. CONFIGURAÇÕES & API META                           -->
+    <!-- ---------------------------------------------------- -->
+    <section id="view-settings" class="tab-view hidden space-y-6">
+      <div>
+        <h1 class="text-2xl font-extrabold text-[#111827]">Configurações & Credenciais Meta</h1>
+        <p class="text-sm text-slate-500">Insira suas credenciais da Meta Cloud API e configure o Webhook oficial.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form de Credenciais -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h2 class="text-base font-bold text-slate-800">Credenciais da Meta Graph API</h2>
+            <div class="flex items-center space-x-2">
+              <label class="text-xs font-bold text-slate-600">Modo Simulação:</label>
+              <input type="checkbox" id="setting-simulation-mode" class="w-4 h-4 text-[#059669] rounded border-slate-300">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Access Token Permanente (System User Token):</label>
+            <input type="password" id="setting-access-token" placeholder="EAA..." class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            <p class="text-[11px] text-slate-400 mt-1">Token de Usuário do Sistema criado no Meta Business Manager com permissões <code>whatsapp_business_messaging</code> e <code>whatsapp_business_management</code>.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Phone Number ID:</label>
+              <input type="text" id="setting-phone-id" placeholder="Ex: 104829104810294" class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Business Account ID (WABA ID):</label>
+              <input type="text" id="setting-waba-id" placeholder="Ex: 109284019284019" class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Versão da Graph API:</label>
+              <input type="text" id="setting-api-version" value="v21.0" class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 bg-slate-50">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Webhook Verify Token:</label>
+              <input type="text" id="setting-verify-token" class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+            <button type="button" onclick="testMetaConnection()" class="inline-flex items-center space-x-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2.5 rounded-xl border border-slate-200 transition">
+              <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+              <span>Testar Conexão com a Meta</span>
+            </button>
+
+            <div class="flex items-center space-x-3">
+              <div id="settings-save-feedback" class="hidden"></div>
+              <button type="button" onclick="saveSettings()" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Salvar Configurações</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="connection-test-result" class="hidden p-4 rounded-xl text-xs space-y-2 mt-4"></div>
+        </div>
+
+        <!-- Guia Passo a Passo & Webhook Info -->
+        <div class="space-y-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+            <h3 class="text-sm font-bold text-slate-800 flex items-center">
+              <i data-lucide="webhook" class="w-4 h-4 mr-2 text-[#059669]"></i>
+              Configuração do Webhook da Meta
+            </h3>
+            <p class="text-xs text-slate-500">Para receber atualizações de mensagens <b>Entregues</b> e <b>Lidas</b> em tempo real:</p>
+            
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">URL de Retorno de Chamada:</label>
+              <div class="flex items-center space-x-1.5">
+                <input type="text" id="display-webhook-url" readonly value="https://displayed-event-interest-odds.trycloudflare.com/api/webhook" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-2 text-[11px] font-mono text-slate-700">
+                <button onclick="copyToClipboard(document.getElementById('display-webhook-url').value, 'URL copiada!')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold" title="Copiar">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Token de Verificação (Verify Token):</label>
+              <div class="flex items-center space-x-1.5">
+                <input type="text" id="display-verify-token" readonly class="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-2 text-[11px] font-mono text-slate-700">
+                <button onclick="copyToClipboard(document.getElementById('display-verify-token').value, 'Token copiado!')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold" title="Copiar">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-800 space-y-1">
+              <p class="font-bold flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1"></i> Dica de Ambiente HTTPS:</p>
+              <p>A Meta exige uma URL pública HTTPS ativa para despachar os eventos de entrega.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- 4. MODAIS DO SISTEMA                                     -->
+  <!-- ======================================================== -->
+
+  <!-- MODAL DE DETALHES DA CAMPANHA -->
+  <div id="campaign-details-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 id="modal-campaign-title" class="text-base font-bold text-slate-900">Detalhes da Campanha</h3>
+          <p id="modal-campaign-subtitle" class="text-xs text-slate-500">Acompanhamento dos envios em tempo real</p>
+        </div>
+        <button onclick="closeCampaignModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Métricas da Campanha no Modal -->
+      <div class="px-6 py-4 border-b border-slate-200/80 grid grid-cols-4 gap-3 bg-white">
+        <div class="text-center p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+          <span class="text-[11px] text-slate-500 uppercase font-semibold">Total</span>
+          <p id="modal-stat-total" class="text-lg font-black text-slate-800">0</p>
+        </div>
+        <div class="text-center p-2.5 rounded-xl bg-blue-50 border border-blue-200">
+          <span class="text-[11px] text-blue-600 uppercase font-semibold">Enviadas</span>
+          <p id="modal-stat-sent" class="text-lg font-black text-blue-700">0</p>
+        </div>
+        <div class="text-center p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+          <span class="text-[11px] text-emerald-600 uppercase font-semibold">Entregues / Lidas</span>
+          <p id="modal-stat-delivered" class="text-lg font-black text-emerald-700">0</p>
+        </div>
+        <div class="text-center p-2.5 rounded-xl bg-rose-50 border border-rose-200">
+          <span class="text-[11px] text-rose-600 uppercase font-semibold">Falhas</span>
+          <p id="modal-stat-failed" class="text-lg font-black text-rose-700">0</p>
+        </div>
+      </div>
+
+      <!-- Tabela de Mensagens do Modal -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <label class="text-xs font-semibold text-slate-600">Filtrar:</label>
+            <select id="modal-status-filter" onchange="loadModalMessages()" class="text-xs border border-slate-300 rounded-xl px-2.5 py-1 bg-white">
+              <option value="ALL">Todos os status</option>
+              <option value="SENT">Apenas Enviadas</option>
+              <option value="DELIVERED">Apenas Entregues</option>
+              <option value="READ">Apenas Lidas</option>
+              <option value="FAILED">Apenas Falhas</option>
+            </select>
+          </div>
+          <button id="modal-btn-export" class="inline-flex items-center space-x-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300 font-bold transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Baixar Planilha Excel</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold">
+              <tr>
+                <th class="px-4 py-2.5">Destinatário</th>
+                <th class="px-4 py-2.5">Telefone</th>
+                <th class="px-4 py-2.5">Status</th>
+                <th class="px-4 py-2.5">Horário</th>
+                <th class="px-4 py-2.5">ID Oficial (wamid) / Erro</th>
+              </tr>
+            </thead>
+            <tbody id="modal-messages-tbody" class="divide-y divide-slate-200 bg-white">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="px-6 py-3.5 border-t border-slate-200/80 bg-slate-50 flex justify-end">
+        <button onclick="closeCampaignModal()" class="text-xs font-bold bg-slate-800 hover:bg-black text-white px-5 py-2.5 rounded-xl">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CRIADOR DE NOVO TEMPLATE META -->
+  <div id="create-template-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 flex items-center">
+            <i data-lucide="plus-circle" class="w-5 h-5 mr-2 text-[#059669]"></i>
+            Criar e Submeter Novo Template Oficial
+          </h3>
+          <p class="text-xs text-slate-500">O template será enviado diretamente para aprovação da Meta</p>
+        </div>
+        <button onclick="closeCreateTemplateModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Formulário de Criação -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nome do Template:</label>
+            <input type="text" id="new-tpl-name" oninput="sanitizeTemplateNameInput(this); updateNewTemplatePreview()" placeholder="ex: aviso_promocao_vip" class="w-full text-xs font-mono border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]">
+            <p class="text-[10px] text-slate-400 mt-1">Apenas letras minúsculas, números e underscores (sem espaços ou acentos).</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Categoria:</label>
+              <select id="new-tpl-category" onchange="updateNewTemplatePreview()" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 bg-white">
+                <option value="MARKETING">MARKETING (Ofertas / Vendas)</option>
+                <option value="UTILITY" selected>UTILITY (Avisos / Lembretes)</option>
+                <option value="AUTHENTICATION">AUTHENTICATION (Códigos)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Idioma:</label>
+              <select id="new-tpl-language" onchange="updateNewTemplatePreview()" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 bg-white">
+                <option value="pt_BR" selected>Português (Brasil) - pt_BR</option>
+                <option value="en_US">Inglês (EUA) - en_US</option>
+                <option value="es">Espanhol - es</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Cabeçalho (Opcional):</label>
+            <input type="text" id="new-tpl-header" oninput="updateNewTemplatePreview()" placeholder="Ex: 🎉 OFERTA EXCLUSIVA ou AVISO IMPORTANTE" class="w-full text-xs border border-slate-300 rounded-xl p-2 bg-[#F8FAFC]">
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Corpo da Mensagem:</label>
+              <div class="space-x-1">
+                <button type="button" onclick="insertVariableIntoBody('{{1}}')" class="text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-lg">
+                  + {{1}}
+                </button>
+                <button type="button" onclick="insertVariableIntoBody('{{2}}')" class="text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-lg">
+                  + {{2}}
+                </button>
+                <button type="button" onclick="insertVariableIntoBody('{{3}}')" class="text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-lg">
+                  + {{3}}
+                </button>
+              </div>
+            </div>
+            <textarea id="new-tpl-body" rows="4" oninput="updateNewTemplatePreview()" placeholder="Olá {{1}}, confirmamos o seu pedido {{2}} no valor de R$ {{3}}." class="w-full text-xs border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-[#059669] focus:outline-none bg-[#F8FAFC]"></textarea>
+            <p class="text-[10px] text-slate-400 mt-0.5">Use as tags {{1}}, {{2}} para personalizar o texto para cada cliente.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Rodapé (Opcional):</label>
+            <input type="text" id="new-tpl-footer" oninput="updateNewTemplatePreview()" placeholder="Ex: Responda SAIR para cancelar" class="w-full text-xs border border-slate-300 rounded-xl p-2 bg-[#F8FAFC]">
+          </div>
+
+          <!-- Botões Opcionais -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Botão Interativo (Opcional):</label>
+            <div class="grid grid-cols-3 gap-2 mb-2">
+              <select id="new-tpl-btn-type" onchange="toggleButtonInputs(this.value)" class="text-xs border border-slate-300 rounded-xl p-2 bg-white">
+                <option value="NONE">Sem botão</option>
+                <option value="QUICK_REPLY">Resposta Rápida</option>
+                <option value="URL">Link / Site (URL)</option>
+              </select>
+              <input type="text" id="new-tpl-btn-text" oninput="updateNewTemplatePreview()" placeholder="Texto do botão (ex: Acessar)" class="text-xs border border-slate-300 rounded-xl p-2 col-span-2 hidden bg-[#F8FAFC]">
+            </div>
+            <input type="url" id="new-tpl-btn-url" placeholder="https://seusite.com.br" class="w-full text-xs border border-slate-300 rounded-xl p-2 hidden bg-[#F8FAFC]">
+          </div>
+        </div>
+
+        <!-- Preview no WhatsApp ao Vivo -->
+        <div class="bg-[#F8FAFC] p-5 rounded-2xl border border-slate-200 flex flex-col items-center justify-center">
+          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Prévia em Tempo Real</p>
+          
+          <div class="w-full max-w-[300px] bg-[#EFEAE2] rounded-2xl p-4 shadow-inner min-h-[340px] flex flex-col justify-end border border-slate-300">
+            <div class="bg-white rounded-xl p-3.5 text-xs shadow-sm space-y-1.5 relative border border-slate-100">
+              <div id="new-preview-header" class="font-bold text-slate-900 text-xs hidden"></div>
+              <p id="new-preview-body" class="text-slate-800 whitespace-pre-wrap leading-relaxed">Digite o corpo da mensagem para visualizar...</p>
+              <p id="new-preview-footer" class="text-[10px] text-slate-400 hidden"></p>
+              <div class="flex justify-end items-center space-x-1 text-[9px] text-slate-400 mt-1">
+                <span>12:00</span>
+                <i data-lucide="check-check" class="w-3 h-3 text-sky-500"></i>
+              </div>
+
+              <!-- Botão simulado -->
+              <div id="new-preview-button" class="hidden border-t border-slate-100 pt-2 text-center">
+                <div class="text-[#059669] font-bold text-xs flex items-center justify-center space-x-1 py-1.5 bg-slate-50 rounded-lg">
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                  <span id="new-preview-button-text">Acessar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-slate-200/80 bg-slate-50 flex items-center justify-between">
+        <button onclick="closeCreateTemplateModal()" class="text-xs font-bold text-slate-600 hover:text-slate-800 px-4 py-2">
+          Cancelar
+        </button>
+        <button id="btn-submit-new-template" onclick="submitNewTemplateToMeta()" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-6 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Enviar para Aprovação da Meta</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALHES DA LISTA SALVA (AUDIÊNCIA) -->
+  <div id="audience-detail-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 id="audience-modal-title" class="text-base font-bold text-slate-900">Contatos da Lista</h3>
+          <p id="audience-modal-subtitle" class="text-xs text-slate-500">Visualização dos destinatários salvos</p>
+        </div>
+        <button onclick="closeAudienceModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6">
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold">
+              <tr>
+                <th class="px-4 py-2.5">Nome</th>
+                <th class="px-4 py-2.5">Telefone</th>
+                <th class="px-4 py-2.5">Dados Extras</th>
+              </tr>
+            </thead>
+            <tbody id="audience-modal-tbody" class="divide-y divide-slate-200 bg-white">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="px-6 py-3.5 border-t border-slate-200/80 bg-slate-50 flex justify-between items-center">
+        <button id="btn-use-audience-in-dispatch" class="inline-flex items-center space-x-1.5 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-4 py-2.5 rounded-xl transition">
+          <i data-lucide="rocket" class="w-3.5 h-3.5"></i>
+          <span>Criar Campanha com Esta Lista</span>
+        </button>
+        <button onclick="closeAudienceModal()" class="text-xs font-bold bg-slate-800 hover:bg-black text-white px-5 py-2.5 rounded-xl">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
