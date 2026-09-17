@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Proprietário (Super Admin) - Impulso</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            impulso: {
+              DEFAULT: '#059669',
+              dark: '#047857',
+              darker: '#065F46',
+              mint: '#D1FAE5',
+              graphite: '#111827',
+              bg: '#F8FAFC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 min-h-screen flex flex-col antialiased">
+
+  <!-- Topbar -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <!-- Logo Impulso -->
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 shrink-0">
+          <path d="M7.5 22.8C7.1 21.9 7.3 20.8 8.1 20.1L15.6 13.8C16.6 12.9 18.2 13.2 18.8 14.4L20.2 17.3C20.6 18.2 20.4 19.3 19.6 20L12.1 26.3C11.1 27.2 9.5 26.9 8.9 25.7L7.5 22.8Z" fill="#059669"/>
+          <path d="M16 13.8C15.6 12.9 15.8 11.8 16.6 11.1L24.1 4.8C25.1 3.9 26.7 4.2 27.3 5.4L28.7 8.3C29.1 9.2 28.9 10.3 28.1 11L20.6 17.3C19.6 18.2 18 17.9 17.4 16.7L16 13.8Z" fill="#059669"/>
+        </svg>
+        <div>
+          <span class="font-extrabold text-base text-[#111827] flex items-center">
+            impulso
+            <span class="ml-2 text-[10px] bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Super Admin</span>
+          </span>
+          <span class="text-[11px] text-slate-400 block -mt-0.5">Gestão Global de Assinantes & Consumo</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="/index.html" class="inline-flex items-center space-x-1.5 text-xs bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-2 rounded-xl border border-slate-200 font-bold transition">
+          <i data-lucide="layout" class="w-3.5 h-3.5 text-[#059669]"></i>
+          <span>Acessar Área do Cliente</span>
+        </a>
+        <button onclick="logout()" class="inline-flex items-center space-x-1 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-3 py-2 rounded-xl border border-rose-200 transition font-bold">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1">
+
+    <!-- Header Actions -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-extrabold text-[#111827]">Painel do Proprietário</h1>
+        <p class="text-sm text-slate-500">Controle total de empresas cadastradas, planos, limites de envio e suspensão imediata</p>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button onclick="loadAdminOverview()" class="p-2.5 text-slate-500 hover:text-slate-800 bg-white border border-slate-200 rounded-xl shadow-sm" title="Recarregar dados">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+        <button onclick="openNewTenantModal()" class="inline-flex items-center space-x-2 text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-4 py-2.5 rounded-xl shadow-sm shadow-emerald-200 transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Cadastrar Nova Empresa</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm space-y-2">
+        <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+          <span>Total de Empresas</span>
+          <i data-lucide="building-2" class="w-4 h-4 text-purple-600"></i>
+        </div>
+        <p id="kpi-total-tenants" class="text-3xl font-black text-slate-900">0</p>
+        <span class="text-[11px] text-slate-400">Clientes cadastrados</span>
+      </div>
+
+      <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm space-y-2">
+        <div class="flex items-center justify-between text-[#059669] text-xs font-bold uppercase tracking-wider">
+          <span>Empresas Ativas</span>
+          <i data-lucide="check-circle" class="w-4 h-4 text-[#059669]"></i>
+        </div>
+        <p id="kpi-active-tenants" class="text-3xl font-black text-[#059669]">0</p>
+        <span class="text-[11px] text-emerald-600">Assinaturas regulares</span>
+      </div>
+
+      <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm space-y-2">
+        <div class="flex items-center justify-between text-rose-600 text-xs font-bold uppercase tracking-wider">
+          <span>Suspensas</span>
+          <i data-lucide="ban" class="w-4 h-4 text-rose-600"></i>
+        </div>
+        <p id="kpi-suspended-tenants" class="text-3xl font-black text-rose-600">0</p>
+        <span class="text-[11px] text-rose-500">Inadimplência ou bloqueadas</span>
+      </div>
+
+      <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm space-y-2">
+        <div class="flex items-center justify-between text-blue-600 text-xs font-bold uppercase tracking-wider">
+          <span>Disparos no Mês</span>
+          <i data-lucide="send" class="w-4 h-4 text-blue-600"></i>
+        </div>
+        <p id="kpi-total-sent" class="text-3xl font-black text-blue-700">0</p>
+        <span class="text-[11px] text-slate-400">Mensagens enviadas globalmente</span>
+      </div>
+    </div>
+
+    <!-- Tabela de Empresas (Tenants) -->
+    <div class="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
+      <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h3 class="font-bold text-base text-slate-900">Empresas Clientes (Tenants)</h3>
+          <p class="text-xs text-slate-500">Gerencie status, limites de mensagens e acesso de cada cliente</p>
+        </div>
+        <input type="text" id="tenant-search" onkeyup="filterTenants(this.value)" placeholder="Buscar por nome ou CNPJ..." class="bg-[#F8FAFC] border border-slate-200 text-xs rounded-xl px-3.5 py-2 text-slate-800 placeholder-slate-400 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#059669]">
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-100">
+            <tr>
+              <th class="px-6 py-3.5">ID / Empresa</th>
+              <th class="px-6 py-3.5">Plano</th>
+              <th class="px-6 py-3.5">Consumo Mensal</th>
+              <th class="px-6 py-3.5">Status</th>
+              <th class="px-6 py-3.5">Usuários / Campanhas</th>
+              <th class="px-6 py-3.5 text-right">Ações Rápidas</th>
+            </tr>
+          </thead>
+          <tbody id="tenants-tbody" class="divide-y divide-slate-100">
+            <!-- Injetado dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabela de Planos -->
+    <div class="bg-white border border-slate-200/80 rounded-2xl p-6 space-y-4 shadow-sm">
+      <h3 class="font-bold text-base text-slate-900">Planos de Assinatura Cadastrados</h3>
+      <div id="plans-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Injetado dinamicamente -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: CADASTRAR NOVA EMPRESA -->
+  <div id="new-tenant-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="font-bold text-base text-slate-900 flex items-center">
+          <i data-lucide="building-2" class="w-5 h-5 mr-2 text-[#059669]"></i>
+          Cadastrar Nova Empresa Cliente
+        </h3>
+        <button onclick="closeNewTenantModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="new-tenant-form" onsubmit="submitNewTenant(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Nome da Empresa / Razão Social:</label>
+          <input type="text" id="modal-tenant-name" required placeholder="Ex: Farmácia São Paulo Ltda" class="w-full bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 placeholder-slate-400">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">CNPJ ou CPF:</label>
+            <input type="text" id="modal-tenant-doc" placeholder="00.000.000/0001-00" class="w-full bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 placeholder-slate-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Plano Inicial:</label>
+            <select id="modal-tenant-plan" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800">
+              <option value="1">Starter (5.000 msgs/mês)</option>
+              <option value="2" selected>Pro (25.000 msgs/mês)</option>
+              <option value="3">Enterprise (100.000 msgs/mês)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+          <p class="text-[11px] font-bold text-[#059669] uppercase tracking-wider">Acesso do Administrador da Empresa:</p>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">Nome do Gestor:</label>
+            <input type="text" id="modal-admin-name" required placeholder="Ex: Roberto Silva" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs text-slate-800">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">E-mail de Login do Cliente:</label>
+            <input type="email" id="modal-admin-email" required placeholder="roberto@farmaciasp.com.br" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs text-slate-800">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">Senha Inicial de Acesso:</label>
+            <input type="password" id="modal-admin-password" required placeholder="••••••••" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs text-slate-800">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-2">
+          <button type="button" onclick="closeNewTenantModal()" class="text-xs font-bold text-slate-500 hover:text-slate-800 px-4 py-2">
+            Cancelar
+          </button>
+          <button type="submit" class="text-xs bg-[#059669] hover:bg-[#047857] text-white font-bold px-6 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition">
+            Salvar & Criar Empresa
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('auth_token');
+    const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
+
+    // Validação de acesso ao Super Admin
+    if (!token || user.role !== 'SUPERADMIN') {
+      window.location.href = '/login.html';
+    }
+
+    let allTenantsData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      loadAdminOverview();
+    });
+
+    async function authFetch(url, options = {}) {
+      options.headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      };
+      const res = await fetch(url, options);
+      if (res.status === 401 || res.status === 403) {
+        if (res.status === 403) {
+          const err = await res.json();
+          alert('Acesso negado: ' + (err.error || 'Apenas o Super Admin pode executar esta ação.'));
+        } else {
+          logout();
+        }
+      }
+      return res;
+    }
+
+    function logout() {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+      window.location.href = '/login.html';
+    }
+
+    async function loadAdminOverview() {
+      try {
+        const res = await authFetch('/api/admin/overview');
+        const data = await res.json();
+
+        // KPIs
+        document.getElementById('kpi-total-tenants').textContent = data.metrics.totalTenants;
+        document.getElementById('kpi-active-tenants').textContent = data.metrics.activeTenants;
+        document.getElementById('kpi-suspended-tenants').textContent = data.metrics.suspendedTenants;
+        document.getElementById('kpi-total-sent').textContent = data.metrics.totalSentMonth.toLocaleString('pt-BR');
+
+        // Renderiza Planos
+        renderPlans(data.plans || []);
+
+        // Busca lista completa de tenants
+        const tenantsRes = await authFetch('/api/admin/tenants');
+        allTenantsData = await tenantsRes.json();
+        renderTenantsTable(allTenantsData);
+      } catch (err) {
+        console.error('Erro ao carregar dados do admin:', err);
+      }
+    }
+
+    function renderTenantsTable(tenants) {
+      const tbody = document.getElementById('tenants-tbody');
+      if (!tbody) return;
+
+      if (tenants.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-6 text-center text-slate-400">Nenhuma empresa encontrada.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = tenants.map(t => {
+        const percent = Math.min(100, Math.round(((t.current_month_sent || 0) / (t.monthly_limit || 1)) * 100));
+        const isActive = t.status === 'ACTIVE';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="px-6 py-4">
+              <span class="font-bold text-sm text-slate-900 block">${t.name}</span>
+              <span class="text-[11px] text-slate-400 font-mono">${t.document || 'Sem documento'} • ID #${t.id}</span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="font-bold px-2.5 py-1 rounded-full text-[10px] bg-emerald-50 text-[#059669] border border-emerald-200">
+                ${t.plan_name || 'Plano'}
+              </span>
+            </td>
+            <td class="px-6 py-4 w-48">
+              <div class="flex justify-between text-[11px] text-slate-500 mb-1 font-medium">
+                <span>${(t.current_month_sent || 0).toLocaleString('pt-BR')} / ${(t.monthly_limit || 0).toLocaleString('pt-BR')}</span>
+                <span class="font-bold ${percent >= 90 ? 'text-rose-600' : 'text-slate-700'}">${percent}%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                <div class="h-1.5 rounded-full ${percent >= 90 ? 'bg-rose-500' : 'bg-[#059669]'}" style="width: ${percent}%"></div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${isActive ? 'ATIVO' : 'SUSPENSO'}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-[11px] text-slate-500 font-medium">
+              ${t.user_count || 1} usuário(s) • ${t.campaign_count || 0} campanha(s)
+            </td>
+            <td class="px-6 py-4 text-right space-x-1.5 whitespace-nowrap">
+              ${isActive ? `
+                <button onclick="toggleTenantStatus(${t.id}, 'SUSPENDED')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-bold rounded-xl transition inline-flex items-center space-x-1">
+                  <i data-lucide="ban" class="w-3 h-3"></i>
+                  <span>Suspender</span>
+                </button>
+              ` : `
+                <button onclick="toggleTenantStatus(${t.id}, 'ACTIVE')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-[#059669] border border-emerald-200 text-[11px] font-bold rounded-xl transition inline-flex items-center space-x-1">
+                  <i data-lucide="check" class="w-3 h-3"></i>
+                  <span>Reativar</span>
+                </button>
+              `}
+              <button onclick="resetTenantQuota(${t.id})" class="p-1.5 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl" title="Zerar consumo do mês">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderPlans(plans) {
+      const grid = document.getElementById('plans-grid');
+      if (!grid) return;
+
+      grid.innerHTML = plans.map(p => `
+        <div class="bg-slate-50 border border-slate-200/80 p-5 rounded-2xl flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-sm text-slate-900">${p.name}</span>
+              <span class="text-xs font-mono font-bold text-[#059669]">R$ ${(p.price_cents / 100).toFixed(2)}/mês</span>
+            </div>
+            <p class="text-xs text-slate-500">Limite mensal: <b class="text-slate-800">${p.monthly_limit.toLocaleString('pt-BR')} mensagens</b></p>
+          </div>
+          <div class="text-[10px] text-slate-400 pt-2 border-t border-slate-200">
+            Delay mínimo: ${p.rate_limit_ms}ms • Agendador liberado
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterTenants(q) {
+      if (!q || !q.trim()) {
+        renderTenantsTable(allTenantsData);
+        return;
+      }
+      const term = q.toLowerCase().trim();
+      const filtered = allTenantsData.filter(t => 
+        t.name.toLowerCase().includes(term) || (t.document && t.document.includes(term))
+      );
+      renderTenantsTable(filtered);
+    }
+
+    async function toggleTenantStatus(id, newStatus) {
+      const actionText = newStatus === 'SUSPENDED' ? 'SUSPENDER o acesso' : 'REATIVAR';
+      if (!confirm(`Deseja realmente ${actionText} desta empresa?`)) return;
+
+      try {
+        const res = await authFetch(`/api/admin/tenants/${id}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert(data.message);
+        loadAdminOverview();
+      } catch (err) {
+        alert('Erro ao alterar status: ' + err.message);
+      }
+    }
+
+    async function resetTenantQuota(id) {
+      if (!confirm('Deseja zerar a contagem de mensagens enviadas deste mês para esta empresa?')) return;
+
+      try {
+        const res = await authFetch(`/api/admin/tenants/${id}/reset-quota`, { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert('Consumo do mês zerado com sucesso!');
+        loadAdminOverview();
+      } catch (err) {
+        alert('Erro ao zerar consumo: ' + err.message);
+      }
+    }
+
+    function openNewTenantModal() {
+      document.getElementById('new-tenant-modal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeNewTenantModal() {
+      document.getElementById('new-tenant-modal').classList.add('hidden');
+    }
+
+    async function submitNewTenant(e) {
+      e.preventDefault();
+      const name = document.getElementById('modal-tenant-name').value.trim();
+      const documentNumber = document.getElementById('modal-tenant-doc').value.trim();
+      const planId = document.getElementById('modal-tenant-plan').value;
+      const adminName = document.getElementById('modal-admin-name').value.trim();
+      const adminEmail = document.getElementById('modal-admin-email').value.trim();
+      const adminPassword = document.getElementById('modal-admin-password').value;
+
+      try {
+        const res = await authFetch('/api/admin/tenants', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            document: documentNumber,
+            planId,
+            adminName,
+            adminEmail,
+            adminPassword
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert(`🎉 Empresa "${name}" cadastrada com sucesso!\nO gestor pode acessar com o e-mail: ${adminEmail}`);
+        closeNewTenantModal();
+        document.getElementById('new-tenant-form').reset();
+        loadAdminOverview();
+      } catch (err) {
+        alert('Erro ao criar empresa: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
