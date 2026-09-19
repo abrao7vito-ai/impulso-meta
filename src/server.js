@@ -32,6 +32,11 @@ app.use('/api', optionalAuth);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/samples', express.static(path.join(__dirname, '..', 'samples')));
 
+// Healthcheck para keep-alive e monitoramento 24h
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString(), uptime: process.uptime() });
+});
+
 // Rotas da API
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
